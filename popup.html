@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>QuickNote</title>
+    <link rel="stylesheet" href="popup.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+
+</head>
+
+<body>
+    <div id="toast-container"></div>
+    <label class="switch">
+        <input type="checkbox" id="darkModeToggle">
+        <span class="slider"></span>
+    </label>
+    <label id="open-user-guide" class="help-icon"><i class="fas fa-question-circle"></i></label>
+
+    <h2>QuickNote</h2>
+    <!-- User Guide Modal -->
+
+
+    <div id="user-guide-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-user-guide-modal">&times;</span>
+            <h2>QuickNote User Guide</h2>
+            <div class="guide-section">
+                <h4>How to Add a Note</h4>
+
+                <p>To add a new note, simply type your content into the provided text area. The text area is where you can input all the information you want to capture in your note.</p>
+                <p>After entering your content, click the <strong>"Save"</strong> button located below the text area to save your note. This action will add your note to your list, ensuring that all your important information is stored securely.</p>
+
+                <img src="images/Add-note.png" alt="Creating a note">
+            </div>
+            <div class="guide-section">
+                <h4>Adding Tags</h4>
+                <p>Organize your notes by adding tags. Tags help categorize and filter your notes based on specific topics or themes.</p>
+
+                <p>Select tags from the dropdown menu to categorize your note. Tags help you organize and filter your notes.
+                </p>
+                <img src="images/add-tags.png" alt="Adding tags">
+            </div>
+            <div class="guide-section">
+                <h4>Setting Reminders</h4>
+                <p>Set a reminder for your note using the datetime picker.</p>
+                <p>Once set, you will receive a <strong>Notification</strong> at the specified time to remind you of the task or deadline associated with the note.</p>
+                <img src="images/set-reminder.png" alt="Setting reminders">
+            </div>
+            <div class="guide-section">
+                <h4>Managing Categories</h4>
+                <p><strong>Adding a Category:</strong> To add a new category, click the "Add Category" button. A prompt will appear asking you to enter the name of the new category. Type in the category name and click "OK." If the category does not already
+                    exist, it will be added to your list of categories. If the category already exists, you will be notified with a warning message.</p>
+
+                <!-- Delete Category via Right-Click -->
+                <p><strong>Deleting a Category via Right-Click:</strong> To delete a category using the right-click context menu, navigate to the "Category Selector" dropdown. Right-click on the category you wish to delete and select the "Delete Category"
+                    option from the context menu. A prompt will appear asking you to confirm the deletion.
+
+                </p>
+                <p>Be cautious when deleting categories as this action cannot be undone, and it may affect the organization of your notes.</p>
+
+
+
+
+
+                <img src="images/manage-categories.png" alt="Managing categories">
+            </div>
+            <div class="guide-section">
+                <h4>Searching Notes</h4>
+                <p>Use the <strong>Search</strong> bar to quickly find notes by keywords or tags. Type your query and press enter to search.
+                </p>
+                <img src="images/search-notes.png" alt="Searching notes">
+            </div>
+            <div class="guide-section">
+                <h4>Viewing Note History</h4>
+                <!-- Viewing Note History -->
+                <p><strong>Viewing Note History:</strong> To view the history of your notes, click on the "View History" button. This will open the history modal, displaying a list of all actions performed on your notes, including creation, editing, and
+                    deletion. Each entry in the history will show details such as the action taken, the timestamp, and, if applicable, the old and updated versions of the note.</p>
+
+                <!-- Deleting a History Entry -->
+                <p><strong>Deleting a History Entry:</strong> To delete a specific entry from the note history, locate the entry you wish to remove within the history modal. Click on the "Delete" button next to the entry. A confirmation prompt will appear,
+                    asking you to confirm the deletion. Once confirmed, the entry will be removed from the history. Note that this action is permanent and cannot be undone.</p>
+
+                <!-- Automatic Deletion of Old History -->
+                <p><strong>Automatic Deletion of Old History:</strong> The note history will be automatically cleaned up to remove entries older than 2 days. This ensures that your history remains manageable and relevant. Entries that are older than this
+                    period will be deleted automatically, keeping only recent and relevant note history.</p>
+
+                <img src="images/view-history.png" alt="Viewing note history">
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <textarea id="note-input" placeholder="Write your note here..."></textarea>
+
+    <select id="note-tag">
+        <option value="" disabled selected>Select tag</option>
+        <option value="work">Work</option>
+        <option value="personal">Personal</option>
+        <option value="important">Important</option>
+    </select>
+    <select id="template-selector">
+        <option value="">Select a template</option>
+        <option value="meeting-notes">Meeting Notes</option>
+        <option value="to-do-list">To-Do List</option>
+        <option value="journal-entry">Journal Entry</option>
+    </select>
+    <input type="datetime-local" id="reminder-time">
+
+    <!-- Category Selector -->
+    <select id="category-selector">
+        <option value="">Select a category</option>
+    </select>
+    <button id="add-category">Add Category</button>
+    <button id="delete-category" style="display:none;"></button>
+
+    <button id="save-note">Save Note</button>
+    <button id="view-history">View Note History</button>
+
+    <input type="text" id="search-bar" placeholder="Search notes...">
+
+    <h3>My Notes</h3>
+    <div id="notes"></div>
+
+    <!-- Edit Modal -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <label for="edit-note-input">Edit Note:</label>
+            <textarea id="edit-note-input" placeholder="Edit your note here..."></textarea>
+            <label for="edit-reminder-time">Edit Reminder Time:</label>
+            <input type="datetime-local" id="edit-reminder-time">
+            <label for="edit-note-tag">Edit Tag:</label>
+            <select id="edit-note-tag">
+                <option value="" disabled>Select tag</option>
+                <option value="work">Work</option>
+                <option value="personal">Personal</option>
+                <option value="important">Important</option>
+            </select>
+            <label for="edit-note-category">Edit Category:</label>
+            <select id="edit-note-category">
+                <option value="" disabled>Select category</option>
+            </select>
+            <button id="save-edit-note">Save Changes</button>
+        </div>
+    </div>
+
+
+    <!-- History Modal -->
+    <div id="history-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-history-modal">&times;</span>
+            <h3>Note History</h3>
+            <div id="history"></div>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+
+
+
+</body>
+
+</html>

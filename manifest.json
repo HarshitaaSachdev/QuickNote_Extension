@@ -1,0 +1,28 @@
+{
+    "manifest_version": 3,
+    "name": "QuickNote",
+    "version": "1.0",
+    "description": "Take notes directly within your browser and associate them with specific URLs.",
+    "permissions": ["storage",
+        "notifications",
+        "tabs",
+        "alarms"
+    ],
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "24": "icons/note24.png",
+            "64": "icons/note64.png",
+            "128": "icons/note128.png"
+        }
+    },
+    "background": {
+        "service_worker": "background.js"
+    },
+
+    "icons": {
+        "24": "icons/note24.png",
+        "64": "icons/note64.png",
+        "128": "icons/note128.png"
+    }
+}
